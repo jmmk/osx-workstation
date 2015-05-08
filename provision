@@ -103,7 +103,7 @@
                (let [[source (os.path.join files-dir file)]
                      [destination (os.path.join plist-dir file)]]
                  (cp source destination)
-                 (chmod 600 destination)))))))
+                 (chmod 600 destination))))))
 
   (log "Install/Update dotfiles")
   (setv dotfiles-dir (os.path.expanduser "~/.dotfiles"))

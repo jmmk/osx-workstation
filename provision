@@ -64,7 +64,7 @@
               [homebrew-taps (get config "homebrew" "taps")]
               [plist-files (get config "files" "plist")]
               [osx-config (get config "osx" "config")]
-              [osx-scripts (get config "osx" "scripts"]]
+              [osx-scripts (get config "osx" "scripts")]]
 
           (log "Tap extra Homebrew repos")
           (brew-tap homebrew-taps)

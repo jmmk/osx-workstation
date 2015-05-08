@@ -32,16 +32,19 @@
     (unless (default-set? domain key value)
       (run-cmd (.format "defaults write {} {} {} {}" domain key type value)))))
 
-(defn packages-to-install [installed requested-packages]
+(defn installable [installed requested-packages]
   (remove (fn [pkg] (in pkg installed)) requested-packages))
 
 (defn parse-installed [packages]
   (set (.split packages)))
 
 (defn brew-install-packages [packages installed install-fn]
-  (apply install-fn (-> installed
-                        (parse-installed)
-                        (packages-to-install packages))))
+  (let [[packages-to-install (-> installed
+                                 (parse-installed)
+                                 (installable packages)
+                                 (list))]]
+    (when packages-to-install
+      (apply install-fn packages-to-install))))
 
 (defn brew-cask-install [packages]
   (brew-install-packages packages (brew "cask" "list") (brew.bake "cask" "install")))
@@ -85,13 +88,13 @@
                                   [[k v] (.items osx-scripts)]))
 
           (for [config osx-config-list]
-               (if (iterable? config)
+               (if (instance? list config)
                  (for [config config]
                       (write-default config format-vars))
                  (write-default config format-vars)))
 
           (for [script osx-script-list]
-               (if (iterable? script)
+               (if (instance? list script)
                  (for [script script]
                       (run-cmd (apply .format [(get script "cmd")] format-vars)))
                  (run-cmd (apply .format [(get script "cmd")] format-vars))))

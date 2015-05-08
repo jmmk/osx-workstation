@@ -25,12 +25,12 @@ packages = [
 casks = [
   "google-chrome",
   "dropbox",
+  "skype",
   "eclipse-java",
   "slack",
   "caffeine",
   "flux",
   "hammerspoon",
-  "virtualbox",
   "vagrant",
   "libreoffice",
   "iterm2",
@@ -56,66 +56,66 @@ computer-name = "OD"
 domain = "com.apple.finder"
 key = "AppleShowAllExtensions"
 type = "-boolean"
-value = true
+value = "1"
 
 [[osx.config.set-a-blazingly-fast-keyboard-repeat-rate]]
 domain = "NSGlobalDomain"
 key = "KeyRepeat"
 type = "-integer"
-value = 2
+value = "2"
 
 [[osx.config.set-a-blazingly-fast-keyboard-repeat-rate]]
 domain = "NSGlobalDomain"
 key = "InitialKeyRepeat"
 type = "-integer"
-value = 15
+value = "15"
 
 [[osx.config.tap-to-click]]
 domain = "com.apple.driver.AppleBluetoothMultitouch.trackpad"
 key = "Clicking"
 type = "-boolean"
-value = true
+value = "1"
 
 [[osx.config.tap-to-click]]
 domain = "NSGlobalDomain"
 key = "com.apple.mouse.tapBehavior"
 type = "-integer"
-value = 1
+value = "1"
 
 [[osx.config.tap-to-click]]
 domain = "com.apple.mouse.tapBehaviour"
 type = "-integer"
-value = 1
+value = "1"
 
 [osx.config.disable-natural-scrolling]
 domain = "~/Library/Preferences/.GlobalPreferences"
 key = "com.apple.swipescrolldirection"
 type = "-boolean"
-value = false
+value = "0"
 
 [osx.config.avoid-creating-ds-store-files-on-network-volumes]
 domain = "com.apple.desktopservices"
 key = "DSDontWriteNetworkStores"
 type = "-boolean"
-value = true
+value = "1"
 
 [osx.config.automatically-quit-printer-app-once-the-print-jobs-complete]
 domain = "com.apple.print.PrintingPrefs"
-key = "Quit When Finished"
+key = "QuitWhenFinished"
 type = "-boolean"
-value = true
+value = "1"
 
 [osx.config.disable-press-and-hold-for-keys-in-favor-of-key-repeat]
 domain  = "NSGlobalDomain"
 key  = "ApplePressAndHoldEnabled"
 type = "-boolean"
-value = false
+value = "0"
 
 [osx.config.enable-subpixel-font-rendering-on-non-apple-lcds]
 domain = "NSGlobalDomain"
 key = "AppleFontSmoothing"
 type = "-integer"
-value = 2
+value = "2"
 
 [osx.config.set-computer-name]
 domain = "com.apple.smb.server"
@@ -125,19 +125,31 @@ value = "{computer-name}"
 
 [osx.scripts]
 [osx.scripts.restart-automatically-if-the-computer-freezes]
-cmd = "systemsetup -setrestartfreeze on"
+cmd = "sudo systemsetup -setrestartfreeze on"
 
 [[osx.scripts.finder-unhide-home]]
-cmd = "cat /etc/auto_master | grep -v home > /tmp/am; mv /tmp/am /etc/auto_master"
+cmd = "cat /etc/auto_master | grep -v home > /tmp/am; sudo mv /tmp/am /etc/auto_master"
 
 [[osx.scripts.finder-unhide-home]]
-cmd = "automount -vc"
+cmd = "sudo automount -vc"
 
 [osx.scripts.set-computer-name]
-cmd = "scutil --set ComputerName {computer-name}"
+cmd = """
+if [[ ! $(scutil --get ComputerName) == {computer-name} ]]; then
+  sudo scutil --set ComputerName {computer-name}
+fi
+"""
 
 [osx.scripts.set-host-name]
-cmd = "scutil --set HostName {computer-name}"
+cmd = """
+if [[ ! $(scutil --get HostName) == {computer-name} ]]; then
+  sudo scutil --set HostName {computer-name}
+fi
+"""
 
 [osx.scripts.set-local-host-name]
-cmd = "scutil --set LocalHostName {computer-name}"
+cmd = """
+if [[ ! $(scutil --get LocalHostName) == {computer-name} ]]; then
+  sudo scutil --set LocalHostName {computer-name}
+fi
+"""

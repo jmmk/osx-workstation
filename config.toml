@@ -1,0 +1,143 @@
+[homebrew]
+taps = [
+  "caskroom/fonts",
+  "caskroom/cask",
+  "homebrew/versions",
+  "homebrew/dupes",
+]
+
+packages = [
+  "git",
+  "brew-cask",
+  "vim",
+  "tmux",
+  "zsh",
+  "the_silver_searcher",
+  "rbenv",
+  "ruby-build",
+  "rbenv-gemset",
+
+# For pdf viewing with emacs:
+  "xpdf",
+  "ghostscript",
+]
+
+casks = [
+  "google-chrome",
+  "dropbox",
+  "eclipse-java",
+  "slack",
+  "caffeine",
+  "flux",
+  "hammerspoon",
+  "virtualbox",
+  "vagrant",
+  "libreoffice",
+  "iterm2",
+  "font-source-code-pro",
+  "emacs-mac",
+  "google-drive",
+]
+
+[files]
+plist = [
+  "com.googlecode.iterm2.plist",
+  "com.slate.Slate.plist",
+]
+
+# OS X configuration
+# Taken from: https://github.com/kitchenplan/chef-osxdefaults/tree/master/recipes
+[osx]
+[osx.variables]
+computer-name = "OD"
+
+[osx.config]
+[osx.config.finder-show-file-extensions]
+domain = "com.apple.finder"
+key = "AppleShowAllExtensions"
+type = "-boolean"
+value = true
+
+[[osx.config.set-a-blazingly-fast-keyboard-repeat-rate]]
+domain = "NSGlobalDomain"
+key = "KeyRepeat"
+type = "-integer"
+value = 2
+
+[[osx.config.set-a-blazingly-fast-keyboard-repeat-rate]]
+domain = "NSGlobalDomain"
+key = "InitialKeyRepeat"
+type = "-integer"
+value = 15
+
+[[osx.config.tap-to-click]]
+domain = "com.apple.driver.AppleBluetoothMultitouch.trackpad"
+key = "Clicking"
+type = "-boolean"
+value = true
+
+[[osx.config.tap-to-click]]
+domain = "NSGlobalDomain"
+key = "com.apple.mouse.tapBehavior"
+type = "-integer"
+value = 1
+
+[[osx.config.tap-to-click]]
+domain = "com.apple.mouse.tapBehaviour"
+type = "-integer"
+value = 1
+
+[osx.config.disable-natural-scrolling]
+domain = "~/Library/Preferences/.GlobalPreferences"
+key = "com.apple.swipescrolldirection"
+type = "-boolean"
+value = false
+
+[osx.config.avoid-creating-ds-store-files-on-network-volumes]
+domain = "com.apple.desktopservices"
+key = "DSDontWriteNetworkStores"
+type = "-boolean"
+value = true
+
+[osx.config.automatically-quit-printer-app-once-the-print-jobs-complete]
+domain = "com.apple.print.PrintingPrefs"
+key = "Quit When Finished"
+type = "-boolean"
+value = true
+
+[osx.config.disable-press-and-hold-for-keys-in-favor-of-key-repeat]
+domain  = "NSGlobalDomain"
+key  = "ApplePressAndHoldEnabled"
+type = "-boolean"
+value = false
+
+[osx.config.enable-subpixel-font-rendering-on-non-apple-lcds]
+domain = "NSGlobalDomain"
+key = "AppleFontSmoothing"
+type = "-integer"
+value = 2
+
+[osx.config.set-computer-name]
+domain = "com.apple.smb.server"
+key = "NetBIOSName"
+type = "-string"
+value = "{computer-name}"
+
+[osx.scripts]
+[osx.scripts.restart-automatically-if-the-computer-freezes]
+cmd = "systemsetup -setrestartfreeze on"
+
+[[osx.scripts.finder-unhide-home]]
+cmd = "cat /etc/auto_master | grep -v home > /tmp/am; mv /tmp/am /etc/auto_master"
+
+[[osx.scripts.finder-unhide-home]]
+cmd = "automount -vc"
+
+[osx.scripts.set-computer-name]
+cmd = "scutil --set ComputerName {computer-name}"
+
+[osx.scripts.set-host-name]
+cmd = "scutil --set HostName {computer-name}"
+
+[osx.scripts.set-local-host-name]
+cmd = "scutil --set LocalHostName {computer-name}"

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSWindow Frame NSFontPanel</key>
+	<string>950 81 445 270 0 0 1440 877 </string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUHasLaunchedBefore</key>
+	<true/>
+	<key>SULastCheckTime</key>
+	<date>2015-05-04T09:14:10Z</date>
+</dict>
+</plist>

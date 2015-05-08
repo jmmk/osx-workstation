@@ -1,0 +1,54 @@
+#! /usr/bin/env bash
+
+## curl -L https://raw.githubusercontent.com/jmmk/osx-workstation/master/bootstrap | bash
+
+set -eo pipefail
+
+readonly REPO_DIR="$HOME/osx-workstation"
+readonly PYTHON_VERSION=3.4.2
+
+log() {
+  echo "Bootstrap: $1"
+}
+
+check-exists() {
+  hash $1 &> /dev/null
+}
+
+main() {
+  if [[ ! $(check-exists brew) ]]; then
+    log "Install homebrew"
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
+
+  if [[ ! $(check-exists pyenv) ]]; then
+    log "Install pyenv"
+    brew install pyenv
+  fi
+
+  if [[ -z $(pyenv versions | grep "^[ ]*$PYTHON_VERSION$") ]]; then
+    log "Install Python $PYTHON_VERSION and set as global Python"
+    pyenv install $PYTHON_VERSION && pyenv global $PYTHON_VERSION
+    pyenv rehash
+
+    log "Install hy"
+    pip install hy
+  fi
+
+  if [[ -z $(brew list | grep "^git$") ]]; then
+    log "Install git from homebrew"
+    brew install git
+  fi
+
+  log "Get latest provisioning code"
+  if [[ ! -d "$REPO_DIR" ]]; then
+    git clone -q --depth 1 git@github.com:jmmk/osx-workstation "$REPO_DIR"
+  else
+    cd "$REPO_DIR" && git pull origin master
+  fi
+
+  log "Complete"
+  "$REPO_DIR/provision"
+}
+
+main "$@"

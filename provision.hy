@@ -1,4 +1,4 @@
-(import [sh [which brew git chmod cp]])
+(import [sh [which brew git chmod ln]])
 (import subprocess)
 (import shutil)
 (import pytoml)
@@ -97,13 +97,13 @@
                       (run-cmd (apply .format [(get script "cmd")] format-vars)))
                  (run-cmd (apply .format [(get script "cmd")] format-vars))))
 
-          (log "Move plist configurations")
+          (log "Link plist configurations")
           (setv files-dir (os.path.join (os.getcwd) "files"))
           (setv plist-dir (os.path.expanduser "~/Library/Preferences"))
           (for [file plist-files]
                (let [[source (os.path.join files-dir file)]
                      [destination (os.path.join plist-dir file)]]
-                 (cp source destination)
+                 (ln "-Ffhs" source destination)
                  (chmod 600 destination)))))
 
   (log "Install/Update dotfiles")

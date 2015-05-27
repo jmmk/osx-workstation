@@ -115,7 +115,7 @@
 
   (os.chdir dotfiles-dir)
   (git "pull" "-q" "origin" "master")
-  (run-cmd "./setup")
+  (run-cmd "hy setup.hy")
 
   (setv zsh (which "zsh"))
   (unless (= (os.getenv "SHELL") zsh)

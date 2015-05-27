@@ -1,5 +1,3 @@
-#! /usr/bin/env hy
-
 (import [sh [which brew git chmod cp]])
 (import subprocess)
 (import shutil)

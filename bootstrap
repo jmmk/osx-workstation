@@ -33,6 +33,8 @@ main() {
 
     log "Install hy"
     pip install hy
+
+    pyenv rehash
   fi
 
   if [[ -z $(brew list | grep "^git$") ]]; then
@@ -48,7 +50,7 @@ main() {
   fi
 
   log "Complete"
-  "$REPO_DIR/provision"
+  hy "$REPO_DIR/provision.hy"
 }
 
 main "$@"

@@ -18,8 +18,8 @@ packages = [
   "rbenv-gemset",
 
 # For pdf viewing with emacs:
-  "xpdf",
-  "ghostscript",
+#  "xpdf",
+#  "ghostscript",
 ]
 
 casks = [
@@ -27,6 +27,7 @@ casks = [
   "dropbox",
   "skype",
   "eclipse-java",
+  "intellij-idea-ce",
   "slack",
   "caffeine",
   "flux",
@@ -36,7 +37,6 @@ casks = [
   "iterm2",
   "font-source-code-pro",
   "emacs-mac",
-  "google-drive",
 ]
 
 [files]

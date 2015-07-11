@@ -1,7 +1,7 @@
 (import [sh [which brew git chmod ln]])
 (import subprocess)
 (import shutil)
-(import pytoml)
+(import toml)
 (import os)
 
 
@@ -12,12 +12,15 @@
   (bool (shutil.which cmd)))
 
 (defn run-cmd [cmd]
+  (apply subprocess.call [cmd] {"shell" true}))
+
+(defn run-cmd-squelch [cmd]
   "Run shell command and squelch output"
-  (apply subprocess.call [(+ cmd " &> /dev/null")] {"shell" true}))
+  (run-cmd (+ cmd " &> /dev/null")))
 
 (defn check-cmd [cmd]
   "Check if a shell command returns true or false"
-  (zero? (run-cmd cmd)))
+  (zero? (run-cmd-squelch cmd)))
 
 (defn default-set? [domain key value]
   (check-cmd (.format "defaults read {} {} | grep '^{}$'" domain key value)))
@@ -28,7 +31,7 @@
         [type (.get entry "type" "")]
         [value (apply .format [(.get entry "value" "")] format-vars)]]
     (unless (default-set? domain key value)
-      (run-cmd (.format "defaults write {} {} {} {}" domain key type value)))))
+      (run-cmd-squelch (.format "defaults write {} {} {} {}" domain key type value)))))
 
 (defn installable [installed requested-packages]
   (remove (fn [pkg] (in pkg installed)) requested-packages))
@@ -59,7 +62,7 @@
   (brew "update")
 
   (with [[f (open "config.toml" "r")]]
-        (let [[config (pytoml.load f)]
+        (let [[config (toml.load f)]
               [homebrew-packages (get config "homebrew" "packages")]
               [homebrew-casks (get config "homebrew" "casks")]
               [homebrew-taps (get config "homebrew" "taps")]
@@ -94,8 +97,8 @@
           (for [script osx-script-list]
                (if (instance? list script)
                  (for [script script]
-                      (run-cmd (apply .format [(get script "cmd")] format-vars)))
-                 (run-cmd (apply .format [(get script "cmd")] format-vars))))
+                      (run-cmd-squelch (apply .format [(get script "cmd")] format-vars)))
+                 (run-cmd-squelch (apply .format [(get script "cmd")] format-vars))))
 
           (log "Link plist configurations")
           (setv files-dir (os.path.join (os.getcwd) "files"))
@@ -115,9 +118,10 @@
 
   (os.chdir dotfiles-dir)
   (git "pull" "-q" "origin" "master")
+  (log "run setup")
   (run-cmd "hy setup.hy")
 
   (setv zsh (which "zsh"))
   (unless (= (os.getenv "SHELL") zsh)
     (log "chsh to zsh")
-    (run-cmd (.format "chsh -s {}" zsh))))
+    (run-cmd-squelch (.format "chsh -s {}" zsh))))

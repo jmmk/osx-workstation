@@ -30,11 +30,6 @@ main() {
     log "Install Python $PYTHON_VERSION and set as global Python"
     pyenv install $PYTHON_VERSION && pyenv global $PYTHON_VERSION
     pyenv rehash
-
-    log "Install hy"
-    pip install hy
-
-    pyenv rehash
   fi
 
   if [[ -z $(brew list | grep "^git$") ]]; then
@@ -48,6 +43,10 @@ main() {
   else
     cd "$REPO_DIR" && git pull -q origin master
   fi
+
+  log "Install/Update python requirements"
+  pip install -r "$REPO_DIR/requirements.txt" --upgrade > /dev/null
+  pyenv rehash
 
   log "Complete"
   hy "$REPO_DIR/provision.hy"

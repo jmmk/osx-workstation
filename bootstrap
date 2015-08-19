@@ -5,7 +5,6 @@
 set -eo pipefail
 
 readonly REPO_DIR="$HOME/osx-workstation"
-readonly PYTHON_VERSION=3.4.2
 
 log() {
   echo "Bootstrap: $1"
@@ -21,17 +20,6 @@ main() {
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
 
-  if ! $(check-exists pyenv); then
-    log "Install pyenv"
-    brew install pyenv
-  fi
-
-  if [[ -z $(pyenv versions | grep -E "^\*?[ ]*$PYTHON_VERSION.*$") ]]; then
-    log "Install Python $PYTHON_VERSION and set as global Python"
-    pyenv install $PYTHON_VERSION && pyenv global $PYTHON_VERSION
-    pyenv rehash
-  fi
-
   if [[ -z $(brew list | grep "^git$") ]]; then
     log "Install git from homebrew"
     brew install git
@@ -44,12 +32,13 @@ main() {
     cd "$REPO_DIR" && git pull -q origin master
   fi
 
-  log "Install/Update python requirements"
-  pip install -r "$REPO_DIR/requirements.txt" --upgrade > /dev/null
-  pyenv rehash
+  if ! $(check-exists brew); then
+    log "Install planck"
+    brew install planck
+  fi
 
   log "Complete"
-  hy "$REPO_DIR/provision.hy"
+  planck -s . -m provision.core
 }
 
 main "$@"

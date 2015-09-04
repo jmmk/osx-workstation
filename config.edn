@@ -6,7 +6,9 @@
             :packages #{"mackup"
                         "git"
                         "brew-cask"
-                        ["emacs-mac" "--with-spacemacs-icon"]
+                        {:pkg "emacs-mac"
+                         :args ["--with-spacemacs-icon"]
+                         :post-cmd ["brew" "linkapps"]}
                         "vim"
                         "tmux"
                         "zsh"
